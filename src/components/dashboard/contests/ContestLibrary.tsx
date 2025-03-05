@@ -41,26 +41,26 @@ export function ContestLibrary({
         });
         if (error) throw error;
 
-        // Map contest data to challenges
-        const contestList = data.map(contest => {
-          const contestDetails = contestChallenges.find(c => c.id === contest.challenge_id);
-          return {
-            ...contestDetails,
-            id: contest.challenge_id,
-            startDate: contest.start_date,
-            entryFee: contest.entry_fee,
-            minPlayers: contest.min_players,
-            category: contest.health_category
-          };
-        })
-        .filter(Boolean)
-        // Remove duplicates based on challenge_id
-        .filter((contest, index, self) => 
-          index === self.findIndex(c => c.id === contest.id)
-        );
+        // Create a map for more efficient duplicate detection
+        const uniqueContests = new Map();
 
-        // Store unique contests
-        setContests(contestList);
+        // Map contest data to challenges and eliminate duplicates in a single pass
+        data.forEach(contest => {
+          const contestDetails = contestChallenges.find(c => c.id === contest.challenge_id);
+          if (contestDetails && !uniqueContests.has(contest.challenge_id)) {
+            uniqueContests.set(contest.challenge_id, {
+              ...contestDetails,
+              id: contest.challenge_id,
+              startDate: contest.start_date,
+              entryFee: contest.entry_fee,
+              minPlayers: contest.min_players,
+              category: contest.health_category
+            });
+          }
+        });
+
+        // Convert map values to array
+        setContests(Array.from(uniqueContests.values()));
       } catch (err) {
         console.error('Error fetching upcoming contests:', err);
         setError(err instanceof Error ? err : new Error('Failed to fetch contests'));

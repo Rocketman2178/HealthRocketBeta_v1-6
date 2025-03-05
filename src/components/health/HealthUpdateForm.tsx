@@ -85,9 +85,9 @@ export function HealthUpdateForm({
   };
 
   return (
-    <div className={isOnboarding ? '' : 'fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex flex-col'}>
-      <div className={`w-full max-w-lg bg-gray-800 rounded-lg shadow-xl mx-auto ${isOnboarding ? '' : 'flex-1 overflow-y-auto'}`}>
-        <div className="flex items-center justify-between p-4 border-b border-gray-700">
+    <div className={isOnboarding ? '' : 'fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center'}>
+      <div className={`w-full max-w-lg bg-gray-800 rounded-lg shadow-xl mx-auto ${isOnboarding ? '' : 'max-h-[90vh] flex flex-col'}`}>
+        <div className="sticky top-0 z-10 bg-gray-800 flex items-center justify-between p-4 border-b border-gray-700">
           <div className="flex items-center gap-3">
             <Activity className="text-orange-500" size={24} />
             <h2 className="text-xl font-bold text-white mb-1">
@@ -107,7 +107,7 @@ export function HealthUpdateForm({
           </button>}
         </div>
 
-        <form onSubmit={handleSubmit} className="p-4 space-y-6">
+        <form onSubmit={handleSubmit} className="p-4 space-y-6 overflow-y-auto flex-1">
           {/* Life Expectancy Section */}
           <Card className="p-4 bg-gray-700/50">
             <div className="flex flex-col gap-2 mb-4">
@@ -228,18 +228,18 @@ export function HealthUpdateForm({
             </div>
           )}
 
-          <div className="flex justify-end gap-3">
+          <div className="flex justify-end gap-3 sticky bottom-0 bg-gray-800 py-3">
             {!isOnboarding && <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm text-gray-300 hover:text-white transition-colors mb-4"
+              className="px-4 py-2 text-sm text-gray-300 hover:text-white transition-colors"
             >
               Cancel
             </button>}
             <button
               type="submit"
               disabled={loading || (!canUpdate && !isOnboarding)}
-              className={`px-4 py-2 text-sm text-white rounded-lg transition-colors mb-4 ${
+              className={`px-4 py-2 text-sm text-white rounded-lg transition-colors ${
                 loading || (!canUpdate && !isOnboarding) 
                   ? 'bg-gray-600 cursor-not-allowed' 
                   : 'bg-orange-500 hover:bg-orange-600'
