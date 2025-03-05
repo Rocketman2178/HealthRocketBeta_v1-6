@@ -2,15 +2,16 @@ import { useState, useMemo } from 'react';
 import { User, Search, X, Trophy, Users, Building2 } from 'lucide-react';
 import { PlayerProfileModal } from './PlayerProfileModal';
 import type { LeaderboardEntry } from '../../../types/community';
+import { Portal } from '../../ui/portal';
 
 interface PlayerListProps {
-  isGlobal:boolean;
+  isGlobal: boolean;
   players: LeaderboardEntry[];
   onClose: () => void;
   onPlayerSelect?: (player: LeaderboardEntry) => void;
 }
 
-export function PlayerList({ isGlobal,players, onClose, onPlayerSelect }: PlayerListProps) {
+export function PlayerList({ isGlobal, players, onClose, onPlayerSelect }: PlayerListProps) {
   const [selectedPlayer, setSelectedPlayer] = useState<LeaderboardEntry | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -36,19 +37,23 @@ export function PlayerList({ isGlobal,players, onClose, onPlayerSelect }: Player
   }, [players, searchQuery]);
 
   return (
-    <>
+    <Portal>
       <div 
-        className="absolute inset-0 bg-black/80 backdrop-blur-sm z-[200] flex items-center justify-center p-4"
+        className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[1000]"
         onClick={onClose}
+      />
+      
+      <div
+        className="fixed inset-0 z-[1001] flex items-center justify-center p-4"
       >
         <div 
-          className="w-full max-w-md max-h-[85vh] flex flex-col bg-gray-800 rounded-lg"
+          className="w-full max-w-md max-h-[85vh] flex flex-col bg-gray-800 rounded-lg shadow-2xl border border-gray-700/50"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
           <div className="p-4 border-b border-gray-700">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-white"> {isGlobal? "Global Players":"Community Players"}</h2>
+              <h2 className="text-xl font-bold text-white">{isGlobal ? "Global Players" : "Community Players"}</h2>
               <button
                 onClick={onClose}
                 className="text-gray-400 hover:text-gray-300"
@@ -80,7 +85,7 @@ export function PlayerList({ isGlobal,players, onClose, onPlayerSelect }: Player
                   e.stopPropagation();
                   handlePlayerSelect(player);
                 }}
-                className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700/50 transition-colors text-left group cursor-pointer relative z-[201]"
+                className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700/50 transition-colors text-left group cursor-pointer"
               >
                 {player.avatarUrl ? (
                   <img
@@ -122,13 +127,11 @@ export function PlayerList({ isGlobal,players, onClose, onPlayerSelect }: Player
       </div>
 
       {selectedPlayer && !onPlayerSelect && (
-        <div className="relative z-[202]">
-          <PlayerProfileModal
-            player={selectedPlayer}
-            onClose={() => setSelectedPlayer(null)}
-          />
-        </div>
+        <PlayerProfileModal
+          player={selectedPlayer}
+          onClose={() => setSelectedPlayer(null)}
+        />
       )}
-    </>
+    </Portal>
   );
 }
