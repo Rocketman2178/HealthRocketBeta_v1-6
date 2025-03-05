@@ -1,6 +1,7 @@
 import { BrowserRouter } from 'react-router-dom';
 import { SupabaseProvider } from './contexts/SupabaseContext'; 
 import { CosmoProvider } from './contexts/CosmoContext';
+import { ModalProvider } from './contexts/ModalContext';
 import AppContent from './components/common/AppContent';
 
 function App() {
@@ -8,7 +9,9 @@ function App() {
     <BrowserRouter>
       <SupabaseProvider>
         <CosmoProvider>
-          <AppContent />
+          <ModalProvider>
+            <AppContent />
+          </ModalProvider>
         </CosmoProvider>
       </SupabaseProvider>
     </BrowserRouter>
