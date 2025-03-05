@@ -3,6 +3,7 @@ import { X, Trophy, Heart, Activity, Users, Star } from 'lucide-react';
 import { useCommunity } from '../../../hooks/useCommunity';
 import type { LeaderboardEntry } from '../../../types/community';
 import { ModalPosition } from './CommunityLeaderboard';
+import { Portal } from '../../ui/portal';
 
 interface PlayerProfileModalProps {
   player: LeaderboardEntry;
@@ -22,18 +23,19 @@ export function PlayerProfileModal({ player, onClose, applyPosition, position }:
     };
   }, []);
 
+  // Render modal through portal to avoid DOM hierarchy constraints
   return (
-    <>
-      {/* Solid background overlay with blur that covers the entire viewport */}
+    <Portal>
+      {/* Full screen overlay with blur effect */}
       <div 
-        className="fixed inset-0 z-[250] bg-black/90 backdrop-blur-md" 
+        className="fixed inset-0 z-[1000] bg-black/80 backdrop-blur-sm" 
         onClick={onClose} 
       />
       
-      {/* Modal content positioned based on props or centered by default */}
+      {/* Modal content */}
       <div 
-        className="fixed z-[300] flex items-center justify-center p-4"
-        style={applyPosition ? { ...position, width: 'auto', height: 'auto' } : { inset: 0 }}
+        className="fixed inset-0 z-[1001] flex items-center justify-center p-4"
+        style={applyPosition ? { ...position, width: 'auto', height: 'auto' } : {}}
       >
         <div 
           className="w-full max-w-md bg-gray-800 rounded-lg shadow-2xl border border-gray-700/50"
@@ -126,6 +128,6 @@ export function PlayerProfileModal({ player, onClose, applyPosition, position }:
           </div>
         </div>
       </div>
-    </>
+    </Portal>
   );
 }
