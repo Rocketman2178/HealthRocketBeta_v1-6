@@ -3,7 +3,6 @@ import { Trophy, ChevronDown, ChevronUp, Heart, User, Activity, Zap, Users, Info
 import { Card } from '../../ui/card';
 import { Tooltip } from '../../ui/tooltip';
 import { PlayerList } from './PlayerList';
-import { PlayerProfileModal } from './PlayerProfileModal';
 import { LeaderboardTooltip } from './LeaderboardTooltip';
 import { LeaderboardToggle } from './LeaderboardToggle';
 import { PrizePoolInfo } from './PrizePoolInfo';
@@ -11,6 +10,7 @@ import type { LeaderboardEntry } from '../../../types/community';
 import { supabase } from '../../../lib/supabase';
 import { useCommunity } from '../../../hooks/useCommunity';
 import { useSupabase } from '../../../contexts/SupabaseContext';
+import { useModal } from '../../../contexts/ModalContext';
 
 interface CommunityLeaderboardProps {
   communityId: string;
@@ -25,8 +25,8 @@ type TimeFrame = 'month' | 'quarter' | 'year';
 export function CommunityLeaderboard({ communityId, userId }: CommunityLeaderboardProps) {
   const { user } = useSupabase();
   const { primaryCommunity, allCommunities, loading: communityLoading } = useCommunity(user?.id);
+  const { showPlayerProfile } = useModal(); // Use the modal context
   const [isGlobal, setIsGlobal] = useState(false);
-  const [selectedPlayer, setSelectedPlayer] = useState<LeaderboardEntry | null>(null);
   const [timeframe, setTimeframe] = useState<TimeFrame>('month');
   const [showPlayerList, setShowPlayerList] = useState(false);
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
@@ -35,21 +35,19 @@ export function CommunityLeaderboard({ communityId, userId }: CommunityLeaderboa
   const [expanded, setExpanded] = useState(false);
   const [showCommunitySelector, setShowCommunitySelector] = useState(false);
   const { handleMakePrimary, updating } = useCommunity(user?.id);
-  const [modalPosition, setModalPosition] = useState<ModalPosition>({
-    top: 0,
-    left: 0,
-  });
 
   const handlePlayerClick = (
     entry: LeaderboardEntry,
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     const buttonRect = event.currentTarget?.getBoundingClientRect();
-    setModalPosition({
+    const position = {
       top: buttonRect.bottom + window.scrollY - 700,
       left: buttonRect.left + window.scrollX,
-    });
-    setSelectedPlayer(entry);
+    };
+    
+    // Use the modal context to show the player profile
+    showPlayerProfile(entry, position);
   };
 
   const handleCommunityChange = async (communityId: string) => {
@@ -361,7 +359,7 @@ export function CommunityLeaderboard({ communityId, userId }: CommunityLeaderboa
       <div className="space-y-2 mb-4">
         {entries.slice(0, 3).map((entry) => (
           <div
-            onClick={(event) => handlePlayerClick(entry,event)}
+            onClick={(event) => handlePlayerClick(entry, event)}
             key={entry.userId}
             className={`flex items-center justify-between p-2 rounded-lg cursor-pointer ${
               entry.userId === userId ? 'bg-orange-500/10' : entry.rank % 2 === 0 ? 'bg-gray-700/10' : ''
@@ -428,7 +426,7 @@ export function CommunityLeaderboard({ communityId, userId }: CommunityLeaderboa
         <div className="space-y-2 mt-4 max-h-96 overflow-y-auto">
           {entries.slice(3).map(entry => (
             <div
-              onClick={(event) => handlePlayerClick(entry,event)}
+              onClick={(event) => handlePlayerClick(entry, event)}
               key={entry.userId}
               className={`w-full flex items-center justify-between p-2 rounded-lg cursor-pointer ${
                 entry.userId === userId ? 'bg-orange-500/10' : entry.rank % 2 === 0 ? 'bg-gray-700/10' : ''
@@ -478,14 +476,7 @@ export function CommunityLeaderboard({ communityId, userId }: CommunityLeaderboa
         </div>
       )}
       
-      {selectedPlayer && (
-        <PlayerProfileModal
-         position={modalPosition}
-         applyPosition={true}
-          player={selectedPlayer}
-          onClose={() => setSelectedPlayer(null)}
-        />
-      )}
+      {/* The PlayerProfileModal is now handled by the ModalContext */}
       {showPlayerList && (
         <PlayerList
           isGlobal={isGlobal} 
