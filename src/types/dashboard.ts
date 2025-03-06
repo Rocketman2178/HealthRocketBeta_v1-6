@@ -105,6 +105,7 @@ export interface ProgressProps {
 }
 
 export interface CardProps {
+  id?:string;
   title?: string;
   children: React.ReactNode;
   className?: string;
