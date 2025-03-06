@@ -217,7 +217,7 @@ export function ContestLibrary({
             </div>
           )}
 
-          {filteredContests.map(contest => (
+          { selectedCategory && filteredContests.map(contest => (
             <div
               key={contest.id}
               onClick={() => setSelectedContest(contest)}

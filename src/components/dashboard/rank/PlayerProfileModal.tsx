@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { X, Trophy, Heart, Activity, Users, Star } from 'lucide-react';
 import { useCommunity } from '../../../hooks/useCommunity';
 import type { LeaderboardEntry } from '../../../types/community';
@@ -9,10 +9,9 @@ interface PlayerProfileModalProps {
   player: LeaderboardEntry;
   onClose: () => void;
   position?: ModalPosition;
-  applyPosition?: boolean;
 }
 
-export function PlayerProfileModal({ player, onClose, applyPosition, position }: PlayerProfileModalProps) {
+export function PlayerProfileModal({ player, onClose, position }: PlayerProfileModalProps) {
   const { allCommunities } = useCommunity(player.userId);
 
   // Prevent background scrolling when modal is open
@@ -35,7 +34,7 @@ export function PlayerProfileModal({ player, onClose, applyPosition, position }:
       {/* Modal content */}
       <div 
         className="fixed inset-0 z-[1001] flex items-center justify-center p-4"
-        style={applyPosition ? { ...position, width: 'auto', height: 'auto' } : {}}
+        style={{ ...position, width: 'auto', height: 'auto' }}
       >
         <div 
           className="w-full max-w-md bg-gray-800 rounded-lg shadow-2xl border border-gray-700/50"
@@ -126,6 +125,7 @@ export function PlayerProfileModal({ player, onClose, applyPosition, position }:
               </div>
             </div>
           </div>
+          
         </div>
       </div>
     </Portal>
