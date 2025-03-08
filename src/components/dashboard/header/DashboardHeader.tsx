@@ -1,11 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { Heart, Activity, Rocket, Info, Crown, Gift, Target, Sparkles, X, Palette, Trophy } from 'lucide-react';
-import { MetricCard } from './MetricCard';
-import { HealthDashboard } from '../../health/HealthDashboard';
-import { Tooltip } from '../../ui/tooltip';
-import { useHealthAssessment } from '../../../hooks/useHealthAssessment';
-import { useSupabase } from '../../../contexts/SupabaseContext';
-import { useCosmo } from '../../../contexts/CosmoContext';
+import { useState } from "react";
+import {
+  Heart,
+  Activity,
+  Rocket,
+  Crown,
+  Gift,
+  Target,
+  X,
+  Palette,
+  Trophy,
+} from "lucide-react";
+import { MetricCard } from "./MetricCard";
+import { HealthDashboard } from "../../health/HealthDashboard";
+import { useHealthAssessment } from "../../../hooks/useHealthAssessment";
+import { useSupabase } from "../../../contexts/SupabaseContext";
 
 interface LevelUpModalProps {
   level: number;
@@ -46,9 +54,14 @@ function LevelUpModal({ level, onClose }: LevelUpModalProps) {
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Palette size={18} className="text-orange-500 mt-1 shrink-0" />
+                  <Palette
+                    size={18}
+                    className="text-orange-500 mt-1 shrink-0"
+                  />
                   <div>
-                    <p className="text-white">Custom Rocket Colors, Decals & Effects</p>
+                    <p className="text-white">
+                      Custom Rocket Colors, Decals & Effects
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -73,29 +86,28 @@ interface DashboardHeaderProps {
   level: number;
 }
 
-export function DashboardHeader({ 
-  healthSpanYears, 
-  healthScore, 
+export function DashboardHeader({
+  healthSpanYears,
+  healthScore,
   nextLevelPoints,
-  level
+  level,
 }: DashboardHeaderProps) {
   const [showHealthDashboard, setShowHealthDashboard] = useState(false);
   const [showLevelModal, setShowLevelModal] = useState(false);
   const [hasSeenLevelModal, setHasSeenLevelModal] = useState(() => {
-    return localStorage.getItem('hasSeenLevelModal') === 'true';
+    return localStorage.getItem("hasSeenLevelModal") === "true";
   });
   const { user } = useSupabase();
-  const { showCosmo } = useCosmo();
   const { canUpdate } = useHealthAssessment(user?.id);
 
   const handleShowLevelModal = () => {
     setShowLevelModal(true);
     setHasSeenLevelModal(true);
-    localStorage.setItem('hasSeenLevelModal', 'true');
+    localStorage.setItem("hasSeenLevelModal", "true");
   };
 
   return (
-    <div  id="rocket">
+    <div id="rocket">
       <div className="bg-gray-800 py-4 sm:py-5 border-b border-gray-700 relative">
         <div className="max-w-6xl mx-auto px-4 relative">
           <div className="flex items-center justify-center gap-3 sm:gap-6">
@@ -105,7 +117,7 @@ export function DashboardHeader({
                 v1.6 Beta
               </div>
             </div>
-            <button 
+            <button
               onClick={() => setShowHealthDashboard(true)}
               className="flex-1 max-w-[200px]"
             >
@@ -116,7 +128,7 @@ export function DashboardHeader({
                 showNotification={canUpdate}
               />
             </button>
-            <button 
+            <button
               onClick={() => setShowHealthDashboard(true)}
               className="flex-1 max-w-[200px]"
             >
@@ -127,7 +139,7 @@ export function DashboardHeader({
                 showNotification={canUpdate}
               />
             </button>
-            <button 
+            <button
               onClick={handleShowLevelModal}
               className="flex-1 max-w-[200px]"
             >
@@ -140,7 +152,6 @@ export function DashboardHeader({
             </button>
           </div>
         </div>
-        
       </div>
 
       {showHealthDashboard && (
@@ -152,10 +163,7 @@ export function DashboardHeader({
         />
       )}
       {showLevelModal && (
-        <LevelUpModal
-          level={level}
-          onClose={() => setShowLevelModal(false)}
-        />
+        <LevelUpModal level={level} onClose={() => setShowLevelModal(false)} />
       )}
     </div>
   );

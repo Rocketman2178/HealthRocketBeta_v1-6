@@ -1,4 +1,3 @@
-import React from 'react';
 import { useCosmo } from '../../contexts/CosmoContext';
 import { useSupabase } from '../../contexts/SupabaseContext';
 import { CosmoModal } from './CosmoModal';

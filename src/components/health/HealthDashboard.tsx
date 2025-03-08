@@ -1,4 +1,3 @@
-import React from 'react';
 import { X, Info } from 'lucide-react';
 import { HealthSpanCard } from './HealthSpanCard';
 import { HealthScoreCard } from './HealthScoreCard';

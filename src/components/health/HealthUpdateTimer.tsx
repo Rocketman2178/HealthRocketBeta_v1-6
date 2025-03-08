@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Clock, Plus, Zap } from 'lucide-react';
-import { Card } from '../ui/card';
 import { HealthUpdateForm } from './HealthUpdateForm';
 import { HealthAssessmentHistory } from './HealthAssessmentHistory';
 import { useHealthAssessment } from '../../hooks/useHealthAssessment';
@@ -56,8 +55,7 @@ export function HealthUpdateTimer({ lastUpdate, nextLevelFP, onUpdate }: HealthU
   };
 
   return (
-    <>
-      <Card className="bg-gray-700/50">
+      <div className="bg-gray-700/50">
         <div className="flex items-center py-0.5 px-3">
           {/* Left side - Status */}
           <div className="flex-[3] flex items-center gap-3">
@@ -78,6 +76,7 @@ export function HealthUpdateTimer({ lastUpdate, nextLevelFP, onUpdate }: HealthU
           <div className="flex-1 flex flex-col items-end gap-0.5">
             <button
               onClick={handleShowUpdateForm}
+              // disabled={!canUpdate}
               className="p-1 rounded-lg transition-colors bg-lime-500/20 hover:bg-lime-500/30"
             >
               <Plus 
@@ -101,8 +100,6 @@ export function HealthUpdateTimer({ lastUpdate, nextLevelFP, onUpdate }: HealthU
             </div>
           </div>
         </div>
-      </Card>
-
       {showUpdateForm && (
         <HealthUpdateForm
           canUpdate={canUpdate}
@@ -119,6 +116,8 @@ export function HealthUpdateTimer({ lastUpdate, nextLevelFP, onUpdate }: HealthU
           onClose={() => setShowHistory(false)}
         />
       )}
-    </>
+      </div>
+
+ 
   );
 }
